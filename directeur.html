@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOT — Back Office Directeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#D4A832;--gold-light:#F0C84A;--gold-dark:#A07820;
+  --black:#0A0A0A;--dark:#0d0d0d;--dark2:#141414;--dark3:#1c1c1c;--dark4:#242424;
+  --gray:#777777;--gray-light:#AAAAAA;--white:#F0EEE8;--red:#C0392B;--green:#1a8a4a;
+  --font-heading:'Oswald',sans-serif;--font-body:'Source Sans 3',sans-serif;
+}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;display:flex;}
+
+/* SIDEBAR DIRECTEUR — plus élaborée */
+.sidebar{
+  width:280px;flex-shrink:0;background:var(--dark);
+  border-right:1px solid #1a1a1a;
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:50;
+}
+.sidebar-top{
+  padding:1.5rem;
+  background:linear-gradient(180deg,#1a1200 0%,var(--dark) 100%);
+  border-bottom:1px solid #2a2000;
+}
+.dir-badge-wrap{display:flex;align-items:center;gap:14px;margin-bottom:1rem;}
+.dir-badge{
+  width:52px;height:52px;border-radius:50%;
+  border:2px solid var(--gold);
+  background:radial-gradient(circle at 40% 35%,#3a2800 0%,#0a0800 100%);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  box-shadow:0 0 20px rgba(212,168,50,0.2);flex-shrink:0;
+}
+.dir-info{}
+.dir-name{font-family:var(--font-heading);font-size:17px;font-weight:700;letter-spacing:0.03em;}
+.dir-title{font-size:11px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px;}
+.dir-clearance{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(212,168,50,0.12);border:1px solid rgba(212,168,50,0.3);
+  color:var(--gold);font-size:10px;padding:4px 10px;
+  font-family:var(--font-heading);letter-spacing:0.15em;text-transform:uppercase;
+  border-radius:1px;margin-top:8px;
+}
+.dir-clearance::before{content:'★';font-size:8px;}
+
+.nav-section{padding:1rem 1.25rem 0.4rem;font-size:10px;color:var(--gray);letter-spacing:0.22em;text-transform:uppercase;font-family:var(--font-heading);}
+.nav-item{
+  display:flex;align-items:center;gap:12px;padding:11px 1.5rem;
+  color:var(--gray-light);text-decoration:none;font-size:14px;
+  border-left:3px solid transparent;transition:all 0.2s;cursor:pointer;background:none;border-right:none;border-top:none;border-bottom:none;width:100%;text-align:left;
+}
+.nav-item:hover,.nav-item.active{color:var(--white);background:rgba(212,168,50,0.07);border-left-color:var(--gold);}
+.nav-item.active{color:var(--gold);}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-family:var(--font-heading);}
+.nav-badge-gold{margin-left:auto;background:rgba(212,168,50,0.2);color:var(--gold);font-size:10px;padding:2px 7px;border-radius:10px;font-family:var(--font-heading);}
+
+.sidebar-bottom{margin-top:auto;border-top:1px solid #1a1a1a;padding:1rem 1.25rem;}
+.public-link{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;color:var(--gray);cursor:pointer;text-decoration:none;transition:color 0.2s;}
+.public-link:hover{color:var(--gold);}
+.logout-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;background:none;border:1px solid #2a2a2a;color:var(--gray);font-family:var(--font-body);font-size:14px;cursor:pointer;transition:all 0.2s;border-radius:2px;margin-top:8px;}
+.logout-btn:hover{border-color:var(--red);color:#e74c3c;}
+
+/* MAIN */
+.main-content{margin-left:280px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{
+  background:var(--dark);border-bottom:1px solid #1a1a1a;
+  padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:40;
+}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray);}
+.breadcrumb strong{color:var(--white);font-family:var(--font-heading);font-size:16px;font-weight:600;letter-spacing:0.04em;}
+.breadcrumb span{color:var(--gray-light);}
+.topbar-right{display:flex;align-items:center;gap:1rem;}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);background:var(--dark3);border:1px solid #2a2a2a;padding:5px 12px;border-radius:2px;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#27ae60;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.icon-btn{background:var(--dark3);border:1px solid #2a2a2a;color:var(--gray-light);padding:7px 13px;cursor:pointer;font-size:16px;border-radius:2px;position:relative;transition:all 0.2s;}
+.icon-btn:hover{border-color:var(--gold-dark);color:var(--gold);}
+.icon-btn .dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--red);}
+
+.content{padding:2rem;flex:1;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* GLOBAL STATS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#1a1a1a;margin-bottom:2rem;}
+.kpi{background:var(--dark);padding:1.5rem 1.25rem;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);}
+.kpi-label{font-size:11px;color:var(--gray);letter-spacing:0.12em;text-transform:uppercase;font-family:var(--font-heading);margin-bottom:10px;}
+.kpi-value{font-family:var(--font-heading);font-size:30px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:6px;}
+.kpi-sub{font-size:12px;color:var(--gray-light);}
+.kpi-trend{position:absolute;top:1.25rem;right:1.25rem;font-size:20px;}
+.kpi-change{display:inline-flex;align-items:center;gap:4px;font-size:12px;margin-top:6px;}
+.kpi-change.up{color:#2ecc71;}
+.kpi-change.down{color:#e74c3c;}
+
+/* SECTION TITLE */
+.section-title-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.section-title-bar h3{font-family:var(--font-heading);font-size:14px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px;}
+.section-title-bar h3::after{content:'';width:40px;height:1px;background:rgba(212,168,50,0.3);}
+
+.grid-dash{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+.card{background:var(--dark);border:1px solid #1a1a1a;padding:1.5rem;}
+
+/* AGENTS TABLE */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.section-header h2{font-family:var(--font-heading);font-size:22px;font-weight:700;letter-spacing:0.04em;}
+.btn-new{display:flex;align-items:center;gap:8px;background:var(--gold);color:var(--black);font-family:var(--font-heading);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:10px 20px;border:none;cursor:pointer;border-radius:1px;transition:background 0.2s;}
+.btn-new:hover{background:var(--gold-light);}
+.btn-outline{display:flex;align-items:center;gap:8px;background:none;color:var(--gray-light);font-family:var(--font-heading);font-size:13px;letter-spacing:0.08em;text-transform:uppercase;padding:9px 18px;border:1px solid #2a2a2a;cursor:pointer;border-radius:1px;transition:all 0.2s;}
+.btn-outline:hover{border-color:var(--gold-dark);color:var(--gold);}
+
+.filters-row{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center;}
+.filter-chip{font-size:12px;font-family:var(--font-heading);letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;background:var(--dark3);color:var(--gray-light);border:1px solid #2a2a2a;cursor:pointer;transition:all 0.2s;border-radius:1px;}
+.filter-chip.active,.filter-chip:hover{background:var(--gold);color:var(--black);border-color:var(--gold);}
+.search-input{margin-left:auto;background:var(--dark3);border:1px solid #2a2a2a;color:var(--white);padding:7px 14px;font-family:var(--font-body);font-size:14px;outline:none;border-radius:1px;width:220px;}
+.search-input:focus{border-color:var(--gold-dark);}
+.search-input::placeholder{color:var(--gray);}
+
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--dark3);border-bottom:1px solid #2a2a2a;}
+th{font-family:var(--font-heading);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gray);padding:10px 14px;text-align:left;}
+tbody tr{border-bottom:1px solid #181818;transition:background 0.15s;cursor:pointer;}
+tbody tr:hover{background:var(--dark3);}
+td{padding:13px 14px;font-size:14px;}
+.td-id{font-family:var(--font-heading);font-size:11px;color:var(--gold);letter-spacing:0.08em;}
+.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:1px;font-family:var(--font-heading);letter-spacing:0.08em;text-transform:uppercase;}
+.badge-actif{background:rgba(39,174,96,0.15);color:#2ecc71;}
+.badge-suspendu{background:rgba(192,57,43,0.15);color:#e74c3c;}
+.badge-conge{background:rgba(100,100,100,0.15);color:var(--gray-light);}
+.badge-en-cours{background:rgba(212,168,50,0.15);color:var(--gold);}
+.badge-clos{background:rgba(39,174,96,0.15);color:#2ecc71;}
+.badge-urgent{background:rgba(192,57,43,0.2);color:#e74c3c;}
+.badge-attente{background:rgba(100,100,100,0.2);color:var(--gray-light);}
+.action-btns{display:flex;gap:6px;}
+.act-btn{padding:4px 10px;border-radius:1px;font-size:12px;cursor:pointer;font-family:var(--font-heading);letter-spacing:0.06em;border:1px solid;transition:all 0.2s;}
+.act-btn-view{background:rgba(212,168,50,0.1);border-color:rgba(212,168,50,0.3);color:var(--gold);}
+.act-btn-view:hover{background:rgba(212,168,50,0.2);}
+.act-btn-del{background:rgba(192,57,43,0.1);border-color:rgba(192,57,43,0.3);color:#e74c3c;}
+.act-btn-del:hover{background:rgba(192,57,43,0.2);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--dark);border:1px solid #2a2a2a;border-top:2px solid var(--gold);width:580px;max-width:95vw;padding:2rem;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.modal-hdr h3{font-family:var(--font-heading);font-size:20px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
+.modal-close{background:none;border:none;color:var(--gray);font-size:22px;cursor:pointer;}
+.modal-close:hover{color:var(--white);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.fg{margin-bottom:1.25rem;}
+.fg label{display:block;font-size:11px;font-family:var(--font-heading);letter-spacing:0.15em;text-transform:uppercase;color:var(--gray);margin-bottom:6px;}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--dark3);border:1px solid #2a2a2a;color:var(--white);padding:10px 14px;font-family:var(--font-body);font-size:14px;outline:none;transition:border-color 0.2s;border-radius:1px;}
+.fg select option{background:var(--dark3);}
+.fg textarea{resize:vertical;min-height:80px;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold-dark);}
+.modal-footer{display:flex;gap:1rem;margin-top:1.5rem;}
+.btn-cancel{flex:1;background:none;border:1px solid #2a2a2a;color:var(--gray-light);font-family:var(--font-heading);font-size:14px;padding:11px;cursor:pointer;border-radius:1px;}
+.btn-cancel:hover{border-color:var(--gray);}
+.btn-save{flex:2;background:var(--gold);color:var(--black);font-family:var(--font-heading);font-size:14px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:11px;border:none;cursor:pointer;border-radius:1px;}
+.btn-save:hover{background:var(--gold-light);}
+
+/* ALERT */
+.alert-item{display:flex;align-items:flex-start;gap:12px;padding:1rem;background:var(--dark3);border:1px solid #2a2a2a;border-left:3px solid var(--red);margin-bottom:8px;border-radius:1px;}
+.alert-item.gold{border-left-color:var(--gold);}
+.alert-icon{font-size:20px;flex-shrink:0;}
+.alert-text{font-size:13px;color:var(--gray-light);line-height:1.5;}
+.alert-text strong{color:var(--white);display:block;margin-bottom:2px;}
+.alert-time{font-size:11px;color:var(--gray);margin-top:4px;}
+
+/* BAR CHART SIMPLE */
+.bar-chart{margin-top:0.5rem;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.bar-label{font-size:12px;color:var(--gray-light);width:120px;flex-shrink:0;}
+.bar-track{flex:1;background:var(--dark3);height:8px;border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;background:var(--gold);border-radius:4px;transition:width 1s ease;}
+.bar-val{font-size:12px;color:var(--gold);font-family:var(--font-heading);width:40px;text-align:right;flex-shrink:0;}
+
+/* RAPPORT */
+.rapport-card{background:var(--dark);border:1px solid #1a1a1a;padding:2rem;margin-bottom:1rem;}
+.rapport-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;}
+.rapport-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1a1a1a;}
+.rk{background:var(--dark3);padding:1rem;text-align:center;}
+.rk-num{font-family:var(--font-heading);font-size:24px;color:var(--gold);}
+.rk-lbl{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="dir-badge-wrap">
+      <div class="dir-badge">👑</div>
+      <div class="dir-info">
+        <div class="dir-name">Directeur Général</div>
+        <div class="dir-title">Department of Tax</div>
+      </div>
+    </div>
+    <div class="dir-clearance">Habilitation NIVEAU 5 — ALPHA</div>
+  </div>
+
+  <div class="nav-section">Vue globale</div>
+  <button class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">🏛️</span> Tableau de bord</button>
+  <button class="nav-item" onclick="showPage('alertes',this)"><span class="nav-icon">🚨</span> Alertes & Incidents <span class="nav-badge">3</span></button>
+  <button class="nav-item" onclick="showPage('rapports',this)"><span class="nav-icon">📊</span> Rapports</button>
+
+  <div class="nav-section">Gestion</div>
+  <button class="nav-item" onclick="showPage('agents',this)"><span class="nav-icon">👮</span> Gestion des Agents <span class="nav-badge-gold">8</span></button>
+  <button class="nav-item" onclick="showPage('dossiers',this)"><span class="nav-icon">📁</span> Tous les Dossiers</button>
+  <button class="nav-item" onclick="showPage('messages',this)"><span class="nav-icon">✉️</span> Messagerie <span class="nav-badge">5</span></button>
+
+  <div class="nav-section">Administration</div>
+  <button class="nav-item" onclick="showPage('parametres',this)"><span class="nav-icon">⚙️</span> Paramètres DOT</button>
+  <button class="nav-item" onclick="showPage('logs',this)"><span class="nav-icon">📜</span> Journaux d'accès</button>
+
+  <div class="sidebar-bottom">
+    <a class="public-link" href="index.html" target="_blank">🌐 Voir le site public</a>
+    <button class="logout-btn" onclick="window.location.href='login.html'">🚪 Déconnexion</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="topbar">
+    <div class="breadcrumb">
+      <span>DOT</span>
+      <span style="color:#333;">›</span>
+      <strong id="pageTitle">Tableau de bord</strong>
+    </div>
+    <div class="topbar-right">
+      <div class="live-badge"><div class="live-dot"></div> Système actif</div>
+      <button class="icon-btn">🔔<span class="dot"></span></button>
+      <button class="icon-btn" title="Exporter">⬇</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;">
+        <div>
+          <div style="font-size:12px;color:var(--gray);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Back Office Directeur</div>
+          <h1 style="font-family:var(--font-heading);font-size:26px;font-weight:700;">Vue d'ensemble — <span style="color:var(--gold)" id="todayDate"></span></h1>
+        </div>
+        <button class="btn-new" onclick="showPage('dossiers', document.querySelector('[onclick*=dossiers]'))">+ Nouveau Dossier</button>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-trend">💰</div>
+          <div class="kpi-label">Amendes recouvrées</div>
+          <div class="kpi-value">$679M</div>
+          <div class="kpi-sub">Exercice 2025</div>
+          <div class="kpi-change up">↑ +14% vs 2024</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-trend">📁</div>
+          <div class="kpi-label">Dossiers actifs</div>
+          <div class="kpi-value">342</div>
+          <div class="kpi-sub">Dont 18 urgents</div>
+          <div class="kpi-change up">↑ +23 ce mois</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-trend">👮</div>
+          <div class="kpi-label">Agents actifs</div>
+          <div class="kpi-value">8</div>
+          <div class="kpi-sub">Sur 10 accrédités</div>
+          <div class="kpi-change down">↓ 2 en congé</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-trend">⚖️</div>
+          <div class="kpi-label">Infractions 2026</div>
+          <div class="kpi-value">1,450</div>
+          <div class="kpi-sub">97 poursuites</div>
+          <div class="kpi-change up">↑ +8% vs 2025</div>
+        </div>
+      </div>
+
+      <div class="grid-dash">
+        <div class="card">
+          <div class="section-title-bar"><h3>Activité par département</h3></div>
+          <div class="bar-chart">
+            <div class="bar-row"><div class="bar-label">Investigation</div><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div><div class="bar-val">85%</div></div>
+            <div class="bar-row"><div class="bar-label">Audit fiscal</div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><div class="bar-val">72%</div></div>
+            <div class="bar-row"><div class="bar-label">Anti-fraude</div><div class="bar-track"><div class="bar-fill" style="width:91%"></div></div><div class="bar-val">91%</div></div>
+            <div class="bar-row"><div class="bar-label">Immobilier</div><div class="bar-track"><div class="bar-fill" style="width:54%"></div></div><div class="bar-val">54%</div></div>
+            <div class="bar-row"><div class="bar-label">Douanes</div><div class="bar-track"><div class="bar-fill" style="width:67%"></div></div><div class="bar-val">67%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title-bar"><h3>Alertes récentes</h3></div>
+          <div class="alert-item">
+            <div class="alert-icon">🚨</div>
+            <div><div class="alert-text"><strong>Dossier INV-202600 — Urgent</strong>Société Clean Air : fuite de données fiscales suspectée. Action immédiate requise.</div><div class="alert-time">il y a 2h</div></div>
+          </div>
+          <div class="alert-item gold">
+            <div class="alert-icon">⚠️</div>
+            <div><div class="alert-text"><strong>Rapport Q1 non soumis</strong>3 agents n'ont pas encore soumis leur rapport mensuel.</div><div class="alert-time">il y a 5h</div></div>
+          </div>
+          <div class="alert-item gold">
+            <div class="alert-icon">📋</div>
+            <div><div class="alert-text"><strong>Nouveau dossier assigné</strong>INV-DOT-202602 créé par Agent DOT-00003.</div><div class="alert-time">il y a 1j</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title-bar"><h3>Dossiers prioritaires</h3><button class="btn-outline" onclick="showPage('dossiers',document.querySelector('[onclick*=dossiers]'))">Voir tous →</button></div>
+        <table>
+          <thead><tr><th>Référence</th><th>Entité</th><th>Type</th><th>Agent</th><th>Priorité</th><th>Statut</th><th>Date</th></tr></thead>
+          <tbody>
+            <tr><td class="td-id">INV-DOT-202601</td><td>Entreprise LS Motors</td><td>Audit fiscal</td><td>DOT-00001</td><td><span class="badge badge-en-cours">Normal</span></td><td><span class="badge badge-en-cours">En cours</span></td><td style="font-size:13px;color:var(--gray)">12/04/2026</td></tr>
+            <tr><td class="td-id">INV-DOT-202600</td><td>Société Clean Air</td><td>Fraude fiscale</td><td>DOT-00002</td><td><span class="badge badge-urgent">Urgent</span></td><td><span class="badge badge-urgent">Urgent</span></td><td style="font-size:13px;color:var(--gray)">10/04/2026</td></tr>
+            <tr><td class="td-id">INV-DOT-202598</td><td>Port Commerce Int.</td><td>Audit douanier</td><td>DOT-00004</td><td><span class="badge badge-attente">Normal</span></td><td><span class="badge badge-attente">En attente</span></td><td style="font-size:13px;color:var(--gray)">01/04/2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AGENTS -->
+    <div class="page" id="page-agents">
+      <div class="section-header">
+        <h2>Gestion des Agents</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-outline">⬇ Exporter</button>
+          <button class="btn-new" onclick="openModal('agent')">+ Nouvel Agent</button>
+        </div>
+      </div>
+      <div class="filters-row">
+        <button class="filter-chip active">Tous</button>
+        <button class="filter-chip">Actifs</button>
+        <button class="filter-chip">Suspendus</button>
+        <button class="filter-chip">En congé</button>
+        <input type="text" class="search-input" placeholder="🔍 Rechercher un agent...">
+      </div>
+      <table>
+        <thead><tr><th>Identifiant</th><th>Nom</th><th>Grade</th><th>Département</th><th>Dossiers</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td class="td-id">DOT-00001</td><td>John Mercer</td><td>Agent N2</td><td>Investigation</td><td>12</td><td><span class="badge badge-actif">Actif</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Suspendre</button></div></td></tr>
+          <tr><td class="td-id">DOT-00002</td><td>Sarah Kolins</td><td>Agent N3</td><td>Anti-fraude</td><td>8</td><td><span class="badge badge-actif">Actif</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Suspendre</button></div></td></tr>
+          <tr><td class="td-id">DOT-00003</td><td>Marcus Vega</td><td>Agent N1</td><td>Audit fiscal</td><td>5</td><td><span class="badge badge-actif">Actif</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Suspendre</button></div></td></tr>
+          <tr><td class="td-id">DOT-00004</td><td>Layla Ortiz</td><td>Agent N2</td><td>Douanes</td><td>9</td><td><span class="badge badge-actif">Actif</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Suspendre</button></div></td></tr>
+          <tr><td class="td-id">DOT-00005</td><td>Tyler Brooks</td><td>Agent N1</td><td>Immobilier</td><td>3</td><td><span class="badge badge-conge">En congé</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Suspendre</button></div></td></tr>
+          <tr><td class="td-id">DOT-00006</td><td>Nina Castellano</td><td>Agent N3</td><td>Investigation</td><td>14</td><td><span class="badge badge-actif">Actif</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Suspendre</button></div></td></tr>
+          <tr><td class="td-id">DOT-00007</td><td>Damien Kurtz</td><td>Agent N2</td><td>Anti-fraude</td><td>7</td><td><span class="badge badge-suspendu">Suspendu</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del" style="color:#2ecc71;border-color:rgba(39,174,96,0.3);">Réactiver</button></div></td></tr>
+          <tr><td class="td-id">DOT-00008</td><td>Priya Mehta</td><td>Agent N1</td><td>Audit fiscal</td><td>2</td><td><span class="badge badge-conge">En congé</span></td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Suspendre</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DOSSIERS -->
+    <div class="page" id="page-dossiers">
+      <div class="section-header">
+        <h2>Tous les Dossiers</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-outline">⬇ Exporter</button>
+          <button class="btn-new" onclick="openModal('dossier')">+ Nouveau Dossier</button>
+        </div>
+      </div>
+      <div class="filters-row">
+        <button class="filter-chip active">Tous</button>
+        <button class="filter-chip">En cours</button>
+        <button class="filter-chip">Urgent</button>
+        <button class="filter-chip">En attente</button>
+        <button class="filter-chip">Clôturés</button>
+        <input type="text" class="search-input" placeholder="🔍 Rechercher...">
+      </div>
+      <table>
+        <thead><tr><th>Référence</th><th>Entité</th><th>Type</th><th>Agent assigné</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td class="td-id">INV-DOT-202601</td><td>Entreprise LS Motors</td><td>Audit fiscal</td><td>DOT-00001</td><td><span class="badge badge-en-cours">En cours</span></td><td style="font-size:13px;color:var(--gray)">12/04/2026</td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Clore</button></div></td></tr>
+          <tr><td class="td-id">INV-DOT-202600</td><td>Société Clean Air</td><td>Fraude fiscale</td><td>DOT-00002</td><td><span class="badge badge-urgent">Urgent</span></td><td style="font-size:13px;color:var(--gray)">10/04/2026</td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Clore</button></div></td></tr>
+          <tr><td class="td-id">INV-DOT-202599</td><td>Vinewood Towers</td><td>Contrôle immobilier</td><td>DOT-00005</td><td><span class="badge badge-clos">Clôturé</span></td><td style="font-size:13px;color:var(--gray)">05/04/2026</td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button></div></td></tr>
+          <tr><td class="td-id">INV-DOT-202598</td><td>Port Commerce Int.</td><td>Audit douanier</td><td>DOT-00004</td><td><span class="badge badge-attente">En attente</span></td><td style="font-size:13px;color:var(--gray)">01/04/2026</td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Clore</button></div></td></tr>
+          <tr><td class="td-id">INV-DOT-202595</td><td>LS Petroleum Corp.</td><td>Évasion fiscale</td><td>DOT-00006</td><td><span class="badge badge-urgent">Urgent</span></td><td style="font-size:13px;color:var(--gray)">28/03/2026</td><td><div class="action-btns"><button class="act-btn act-btn-view">Voir</button><button class="act-btn act-btn-del">Clore</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ALERTES -->
+    <div class="page" id="page-alertes">
+      <div class="section-header"><h2>Alertes & Incidents</h2></div>
+      <div class="alert-item" style="margin-bottom:12px;">
+        <div class="alert-icon">🚨</div>
+        <div style="flex:1"><div class="alert-text"><strong>URGENT — Dossier INV-202600 (Clean Air)</strong>Fuite de documents fiscaux suspectée. L'agent DOT-00002 doit être contacté immédiatement. Mise en sécurité du dossier requise.</div><div class="alert-time">il y a 2h — Non traité</div></div>
+        <button class="act-btn act-btn-view" style="flex-shrink:0;align-self:center;">Traiter</button>
+      </div>
+      <div class="alert-item gold" style="margin-bottom:12px;">
+        <div class="alert-icon">⚠️</div>
+        <div style="flex:1"><div class="alert-text"><strong>Rapports manquants — 3 agents</strong>DOT-00003, DOT-00005, DOT-00008 n'ont pas soumis leur rapport mensuel avant la date limite du 28/04/2026.</div><div class="alert-time">il y a 5h — En attente</div></div>
+        <button class="act-btn act-btn-view" style="flex-shrink:0;align-self:center;">Notifier</button>
+      </div>
+      <div class="alert-item gold" style="margin-bottom:12px;">
+        <div class="alert-icon">🔐</div>
+        <div style="flex:1"><div class="alert-text"><strong>Tentative de connexion suspecte</strong>5 tentatives de connexion échouées depuis une adresse inconnue sur le portail agent à 03:42.</div><div class="alert-time">il y a 1j — En cours d'analyse</div></div>
+        <button class="act-btn act-btn-view" style="flex-shrink:0;align-self:center;">Analyser</button>
+      </div>
+    </div>
+
+    <!-- RAPPORTS -->
+    <div class="page" id="page-rapports">
+      <div class="section-header"><h2>Rapports Officiels</h2><button class="btn-new">⬇ Exporter PDF</button></div>
+      <div class="rapport-card">
+        <div class="rapport-header">
+          <div><div style="font-family:var(--font-heading);font-size:20px;font-weight:700;">Rapport Mensuel — Avril 2026</div><div style="font-size:13px;color:var(--gray);margin-top:4px;">Généré le 29/04/2026 · DOT Direction Générale</div></div>
+          <span class="badge badge-en-cours">En cours</span>
+        </div>
+        <div class="rapport-kpis">
+          <div class="rk"><div class="rk-num">23</div><div class="rk-lbl">Nouveaux dossiers</div></div>
+          <div class="rk"><div class="rk-num">$12.4M</div><div class="rk-lbl">Amendes ce mois</div></div>
+          <div class="rk"><div class="rk-num">8</div><div class="rk-lbl">Clôtures</div></div>
+        </div>
+      </div>
+      <div class="rapport-card">
+        <div class="rapport-header">
+          <div><div style="font-family:var(--font-heading);font-size:20px;font-weight:700;">Rapport Trimestriel — Q1 2026</div><div style="font-size:13px;color:var(--gray);margin-top:4px;">Généré le 01/04/2026 · DOT Direction Générale</div></div>
+          <span class="badge badge-clos">Finalisé</span>
+        </div>
+        <div class="rapport-kpis">
+          <div class="rk"><div class="rk-num">67</div><div class="rk-lbl">Dossiers ouverts</div></div>
+          <div class="rk"><div class="rk-num">$48.2M</div><div class="rk-lbl">Amendes Q1</div></div>
+          <div class="rk"><div class="rk-num">24</div><div class="rk-lbl">Clôtures</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="page" id="page-messages">
+      <div class="section-header"><h2>Messagerie Interne</h2><button class="btn-new" onclick="openModal('message')">+ Nouveau Message</button></div>
+      <div class="card">
+        <div class="alert-item" style="border-left-color:var(--gold);">
+          <div class="alert-icon">👮</div>
+          <div><div class="alert-text"><strong>DOT-00002 — Sarah Kolins</strong>Directeur, le dossier Clean Air nécessite une autorisation spéciale pour accéder aux comptes bancaires de l'entité. Veuillez valider.</div><div class="alert-time">il y a 3h</div></div>
+        </div>
+        <div class="alert-item" style="border-left-color:var(--gold);">
+          <div class="alert-icon">👮</div>
+          <div><div class="alert-text"><strong>DOT-00001 — John Mercer</strong>Audit LS Motors terminé. Rapport complet disponible. 3 irrégularités majeures constatées.</div><div class="alert-time">il y a 6h</div></div>
+        </div>
+        <div class="alert-item" style="border:1px solid #2a2a2a;border-left:3px solid #2a2a2a;">
+          <div class="alert-icon">⚖️</div>
+          <div><div class="alert-text"><strong>Système DOT — Tribunal Fédéral</strong>La demande de perquisition pour le dossier INV-202595 a été approuvée par le juge fédéral.</div><div class="alert-time">il y a 1j</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARAMETRES -->
+    <div class="page" id="page-parametres">
+      <div class="section-header"><h2>Paramètres DOT</h2><button class="btn-new">💾 Sauvegarder</button></div>
+      <div class="grid-dash" style="grid-template-columns:1fr 1fr;">
+        <div class="card">
+          <div class="section-title-bar"><h3>Informations de l'agence</h3></div>
+          <div class="fg"><label>Nom officiel</label><input type="text" value="Department of Tax — State of San Andreas"></div>
+          <div class="fg"><label>Code agence</label><input type="text" value="DOT-SA-2006"></div>
+          <div class="fg"><label>Directeur Général</label><input type="text" value="Vous (DIRECTEUR)"></div>
+          <div class="fg"><label>Email officiel</label><input type="text" value="contact@dot.gov.sa"></div>
+        </div>
+        <div class="card">
+          <div class="section-title-bar"><h3>Sécurité & Accès</h3></div>
+          <div class="fg"><label>Code accès directeur</label><input type="password" value="DOT2026"></div>
+          <div class="fg"><label>Code 6 chiffres directeur</label><input type="text" value="000000"></div>
+          <div class="fg"><label>Mot de passe agents</label><input type="password" value="agent2026"></div>
+          <div class="fg"><label>Code 6 chiffres agents</label><input type="text" value="123456"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGS -->
+    <div class="page" id="page-logs">
+      <div class="section-header"><h2>Journaux d'accès</h2></div>
+      <table>
+        <thead><tr><th>Horodatage</th><th>Utilisateur</th><th>Action</th><th>IP</th><th>Résultat</th></tr></thead>
+        <tbody>
+          <tr><td style="font-size:13px;color:var(--gray)">29/04/2026 09:14</td><td class="td-id">DIRECTEUR</td><td>Connexion portail</td><td>192.168.1.1</td><td><span class="badge badge-clos">Succès</span></td></tr>
+          <tr><td style="font-size:13px;color:var(--gray)">29/04/2026 07:32</td><td class="td-id">DOT-00001</td><td>Modification dossier INV-202601</td><td>192.168.1.4</td><td><span class="badge badge-clos">Succès</span></td></tr>
+          <tr><td style="font-size:13px;color:var(--gray)">28/04/2026 22:41</td><td class="td-id">Inconnu</td><td>Tentative de connexion</td><td>45.32.112.89</td><td><span class="badge badge-urgent">Échec ×5</span></td></tr>
+          <tr><td style="font-size:13px;color:var(--gray)">28/04/2026 18:05</td><td class="td-id">DOT-00002</td><td>Création dossier INV-202602</td><td>192.168.1.5</td><td><span class="badge badge-clos">Succès</span></td></tr>
+          <tr><td style="font-size:13px;color:var(--gray)">28/04/2026 14:20</td><td class="td-id">DOT-00006</td><td>Soumission formulaire F-DOT-02</td><td>192.168.1.7</td><td><span class="badge badge-clos">Succès</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-hdr">
+      <h3 id="modalTitle">Nouveau Dossier</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const now = new Date();
+document.getElementById('todayDate').textContent = now.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if(el) el.classList.add('active');
+  const titles = {dashboard:'Tableau de bord',agents:'Gestion des Agents',dossiers:'Tous les Dossiers',alertes:'Alertes & Incidents',rapports:'Rapports',messages:'Messagerie',parametres:'Paramètres',logs:'Journaux d\'accès'};
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+}
+
+const modals = {
+  dossier: {
+    title: 'Nouveau Dossier',
+    body: `
+      <div class="form-row">
+        <div class="fg"><label>Référence (auto)</label><input type="text" value="INV-DOT-202603" readonly style="color:var(--gold)"></div>
+        <div class="fg"><label>Type</label><select><option>Audit fiscal</option><option>Fraude fiscale</option><option>Contrôle immobilier</option><option>Audit douanier</option></select></div>
+      </div>
+      <div class="fg"><label>Nom de l'entité</label><input type="text" placeholder="Ex: Société XYZ"></div>
+      <div class="form-row">
+        <div class="fg"><label>Agent assigné</label><select><option>DOT-00001 — John Mercer</option><option>DOT-00002 — Sarah Kolins</option><option>DOT-00003 — Marcus Vega</option><option>DOT-00004 — Layla Ortiz</option></select></div>
+        <div class="fg"><label>Priorité</label><select><option>Normal</option><option>Prioritaire</option><option>Urgent</option></select></div>
+      </div>
+      <div class="fg"><label>Description</label><textarea placeholder="Motif d'ouverture du dossier..."></textarea></div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+        <button class="btn-save" onclick="closeModal();alert('✅ Dossier créé.')">Créer →</button>
+      </div>`
+  },
+  agent: {
+    title: 'Nouvel Agent',
+    body: `
+      <div class="form-row">
+        <div class="fg"><label>Identifiant (auto)</label><input type="text" value="DOT-00009" readonly style="color:var(--gold)"></div>
+        <div class="fg"><label>Grade</label><select><option>Agent N1</option><option>Agent N2</option><option>Agent N3</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Prénom</label><input type="text" placeholder="Prénom"></div>
+        <div class="fg"><label>Nom</label><input type="text" placeholder="Nom de famille"></div>
+      </div>
+      <div class="fg"><label>Département</label><select><option>Investigation</option><option>Audit fiscal</option><option>Anti-fraude</option><option>Immobilier</option><option>Douanes</option></select></div>
+      <div class="fg"><label>Mot de passe initial</label><input type="text" value="agent2026"></div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+        <button class="btn-save" onclick="closeModal();alert('✅ Agent DOT-00009 créé.')">Créer l\'agent →</button>
+      </div>`
+  },
+  message: {
+    title: 'Nouveau Message',
+    body: `
+      <div class="fg"><label>Destinataire</label><select><option>Tous les agents</option><option>DOT-00001 — John Mercer</option><option>DOT-00002 — Sarah Kolins</option><option>DOT-00003 — Marcus Vega</option></select></div>
+      <div class="fg"><label>Objet</label><input type="text" placeholder="Objet du message..."></div>
+      <div class="fg"><label>Message</label><textarea style="min-height:120px;" placeholder="Rédigez votre message..."></textarea></div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+        <button class="btn-save" onclick="closeModal();alert('✅ Message envoyé.')">Envoyer →</button>
+      </div>`
+  }
+};
+
+function openModal(type) {
+  const m = modals[type];
+  document.getElementById('modalTitle').textContent = m.title;
+  document.getElementById('modalBody').innerHTML = m.body;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeModalOutside(e) { if(e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+document.querySelectorAll('.filter-chip').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.closest('.filters-row').querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

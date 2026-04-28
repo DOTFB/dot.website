@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOT - Department of Tax | Government of San Andreas</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #D4A832;
+    --gold-light: #F0C84A;
+    --gold-dark: #A07820;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --dark4: #2A2A2A;
+    --gray: #888888;
+    --gray-light: #BBBBBB;
+    --white: #F5F3EE;
+    --red: #C0392B;
+    --font-heading: 'Oswald', sans-serif;
+    --font-body: 'Source Sans 3', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: #050505;
+    border-bottom: 1px solid #1f1f1f;
+    padding: 6px 0;
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 0.04em;
+  }
+  .topbar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .topbar a { color: var(--gray); text-decoration: none; margin-left: 1.5rem; }
+  .topbar a:hover { color: var(--gold); }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--dark);
+    border-bottom: 2px solid var(--gold);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 70px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .logo-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: radial-gradient(circle at 40% 35%, #2a2000 0%, #0a0800 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .logo-badge::before {
+    content: '★';
+    color: var(--gold);
+    font-size: 20px;
+  }
+  .logo-text { line-height: 1.1; }
+  .logo-text .dot-name {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .logo-text .dot-name span {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--gray-light);
+    letter-spacing: 0.02em;
+  }
+  .logo-text .dot-sub {
+    font-size: 10px;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .search-bar {
+    flex: 1;
+    max-width: 420px;
+    display: flex;
+    background: var(--dark3);
+    border: 1px solid #333;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-left: auto;
+  }
+  .search-bar input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 8px 14px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--white);
+  }
+  .search-bar input::placeholder { color: var(--gray); }
+  .search-bar button {
+    background: var(--dark4);
+    border: none;
+    border-left: 1px solid #333;
+    padding: 8px 14px;
+    color: var(--gray-light);
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+  }
+  .search-bar button:hover { background: var(--gold); color: var(--black); }
+
+  .btn-membre {
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+    border-radius: 1px;
+  }
+  .btn-membre:hover { background: var(--gold-light); }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--dark2);
+    border-bottom: 1px solid #1f1f1f;
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+  }
+  .nav-inner a {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    text-decoration: none;
+    padding: 14px 20px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: block;
+  }
+  .nav-inner a:hover, .nav-inner a.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+    background: rgba(212,168,50,0.05);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(120deg, #0a0a00 0%, #0d0800 40%, #080808 100%);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 50%, rgba(212,168,50,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(192,57,43,0.04) 0%, transparent 50%);
+  }
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(212,168,50,0.03) 80px);
+  }
+  .hero-content {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+    width: 100%;
+  }
+  .hero-text {}
+  .hero-label {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 62px);
+    font-weight: 700;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em {
+    color: var(--gold);
+    font-style: normal;
+  }
+  .hero-subtitle {
+    font-size: 17px;
+    color: var(--gray-light);
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    text-decoration: none;
+    border-radius: 1px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-primary::after { content: '→'; }
+
+  .hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-emblem {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,50,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .hero-emblem::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,50,0.1);
+  }
+  .hero-emblem::after {
+    content: '';
+    position: absolute;
+    inset: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,50,0.05);
+  }
+  .emblem-inner {
+    text-align: center;
+    z-index: 1;
+  }
+  .emblem-icon { font-size: 80px; line-height: 1; margin-bottom: 8px; }
+  .emblem-text {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 4rem 0; }
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(212,168,50,0.4), transparent);
+  }
+
+  /* ── GRID 3 COLONNES ── */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+  }
+  .grid-col {
+    background: var(--dark);
+    padding: 2rem;
+  }
+
+  /* ── NEWS ── */
+  .news-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #1f1f1f;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .news-item:last-child { border-bottom: none; }
+  .news-item:hover .news-title { color: var(--gold); }
+  .news-title {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    transition: color 0.2s;
+  }
+  .news-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.5;
+  }
+  .news-time {
+    font-size: 12px;
+    color: var(--gray);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .news-img {
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(135deg, #1a1200 0%, #2a1a00 100%);
+    border: 1px solid #2a2000;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    border-radius: 1px;
+  }
+
+  /* ── DOSSIERS ── */
+  .dossier-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--dark2);
+    border: 1px solid #2a2a2a;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 1px;
+  }
+  .dossier-item:hover {
+    border-color: var(--gold-dark);
+    background: #1a1500;
+  }
+  .dossier-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--dark3);
+    border: 1px solid #333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .dossier-info { flex: 1; }
+  .dossier-id {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    font-family: var(--font-heading);
+    margin-bottom: 2px;
+  }
+  .dossier-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .dossier-status {
+    font-size: 12px;
+    color: var(--gray);
+  }
+  .dossier-arrow { color: var(--gray); font-size: 18px; }
+
+  .btn-all {
+    display: block;
+    width: 100%;
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: background 0.2s;
+    border-radius: 1px;
+  }
+  .btn-all:hover { background: var(--gold-light); }
+
+  /* ── À PROPOS ── */
+  .apropos-text {
+    font-size: 14px;
+    color: var(--gray-light);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .check-list { list-style: none; margin-top: 1rem; }
+  .check-list li {
+    font-size: 14px;
+    color: var(--gray-light);
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .check-list li::before {
+    content: '✓';
+    color: var(--gold);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── CHIFFRES CLÉS ── */
+  .stats-section {
+    background: var(--dark2);
+    border-top: 1px solid #1f1f1f;
+    border-bottom: 1px solid #1f1f1f;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #1f1f1f;
+  }
+  .stat-card {
+    background: var(--dark);
+    padding: 2.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .stat-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+  }
+  .stat-number {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── DOSSIERS PUBLICS ── */
+  .filters {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    background: var(--dark2);
+    color: var(--gray-light);
+    border: 1px solid #2a2a2a;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 1px;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #1a1a1a;
+  }
+  .pub-card {
+    background: var(--dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .pub-card:hover { background: var(--dark2); }
+  .card-img {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-img-eco { background: linear-gradient(135deg, #0d1a00 0%, #1a2a00 100%); }
+  .card-img-inv { background: linear-gradient(135deg, #1a0d00 0%, #2a1500 100%); }
+  .card-img-fisc { background: linear-gradient(135deg, #0d0d1a 0%, #15152a 100%); }
+  .card-img-info { background: linear-gradient(135deg, #001a1a 0%, #002a2a 100%); }
+  .card-body { padding: 1rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
+  .card-tag {
+    font-size: 10px;
+    font-family: var(--font-heading);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    flex: 1;
+  }
+  .card-desc { font-size: 13px; color: var(--gray); line-height: 1.5; }
+  .card-meta {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #1f1f1f;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--gray);
+    font-family: var(--font-heading);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ALERT BANNER ── */
+  .alert-banner {
+    background: rgba(192,57,43,0.12);
+    border-left: 3px solid var(--red);
+    padding: 12px 2rem;
+    font-size: 13px;
+    color: var(--gray-light);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .alert-banner strong { color: #e74c3c; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #050505;
+    border-top: 1px solid #1a1a1a;
+    padding: 3rem 0 1.5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .footer-brand .logo-badge { width: 40px; height: 40px; font-size: 16px; }
+  .footer-brand .dot-name { font-size: 22px; }
+  .footer-desc {
+    font-size: 13px;
+    color: var(--gray);
+    margin-top: 1rem;
+    line-height: 1.7;
+    max-width: 280px;
+  }
+  .footer-col h4 {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--gray);
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    border-top: 1px solid #1a1a1a;
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--gray);
+  }
+  .footer-bottom a { color: var(--gray); text-decoration: none; margin-left: 1.5rem; }
+  .footer-bottom a:hover { color: var(--gold); }
+
+  /* ── MODAL LOGIN ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark);
+    border: 1px solid #2a2a2a;
+    border-top: 2px solid var(--gold);
+    width: 420px;
+    max-width: 95vw;
+    padding: 2.5rem;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--gray);
+    font-size: 22px;
+    cursor: pointer;
+  }
+  .modal-close:hover { color: var(--white); }
+  .modal-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  .modal h2 {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .modal p.modal-sub {
+    font-size: 13px;
+    color: var(--gray);
+    margin-bottom: 2rem;
+  }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-family: var(--font-heading);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+  .form-group input {
+    width: 100%;
+    background: var(--dark3);
+    border: 1px solid #333;
+    color: var(--white);
+    padding: 10px 14px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 1px;
+  }
+  .form-group input:focus { border-color: var(--gold-dark); }
+  .form-group input::placeholder { color: var(--gray); }
+  .btn-submit {
+    width: 100%;
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px;
+    border: none;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+    border-radius: 1px;
+  }
+  .btn-submit:hover { background: var(--gold-light); }
+  .modal-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 13px;
+  }
+  .modal-links a { color: var(--gray); text-decoration: none; }
+  .modal-links a:hover { color: var(--gold); }
+
+  .badge-secure {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 1.5rem;
+    justify-content: center;
+  }
+  .badge-secure::before { content: '🔒'; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- Alert -->
+<div class="alert-banner">
+  <strong>⚠ AVIS OFFICIEL :</strong> Toute fraude fiscale est passible de poursuites fédérales en vertu du Code Fiscal de l'État de San Andreas — Article 47-B.
+</div>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <span>GOUVERNEMENT DE SAN ANDREAS — ÉTAT FÉDÉRAL</span>
+    <div>
+      <a href="#">Accessibilité</a>
+      <a href="#">Plan du site</a>
+      <a href="#">Contact</a>
+      <a href="#">EN</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-badge"></div>
+      <div class="logo-text">
+        <div class="dot-name">DOT <span>Department of Tax</span></div>
+        <div class="dot-sub">Government of San Andreas</div>
+      </div>
+    </a>
+    <div class="search-bar">
+      <input type="text" placeholder="Rechercher sur DOT.gov">
+      <button>⌕</button>
+    </div>
+    <a href="#" class="btn-membre" onclick="openModal(); return false;">ESPACE MEMBRE</a>
+  </div>
+</header>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="active">Accueil</a>
+    <a href="#">Département</a>
+    <a href="#">Rapports</a>
+    <a href="#">Ressources</a>
+    <a href="#">Dossiers</a>
+    <a href="#">Législation</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-label">Site Officiel — DOT.gov.sa</div>
+      <h1 class="hero-title">
+        Bienvenue sur le<br>
+        site officiel du<br>
+        <em>Department of Tax</em>
+      </h1>
+      <p class="hero-subtitle">Agence Fédérale de Régulation Économique de l'État de San Andreas. Application des lois fiscales, audit économique et lutte contre la fraude.</p>
+      <a href="#" class="btn-primary">Découvrir le DOT</a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-emblem">
+        <div class="emblem-inner">
+          <div class="emblem-icon">⚖️</div>
+          <div class="emblem-text">D.O.T — S.A.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section News + Dossiers + À propos -->
+<section style="padding: 0; border-top: 1px solid #1a1a1a;">
+  <div class="container" style="padding: 0; max-width: 100%;">
+    <div class="grid-3">
+      <!-- Dernières news -->
+      <div class="grid-col">
+        <div class="section-title">Dernières News</div>
+        <div class="news-img">📰</div>
+        <div class="news-item">
+          <div>
+            <div class="news-title">Nouvelles mesures anti-fraude fiscale 2026</div>
+            <div class="news-desc">Le DOT annonce un renforcement des contrôles sur les sociétés offshore opérant à San Andreas.</div>
+          </div>
+          <div class="news-time">il y a 1h</div>
+        </div>
+        <div class="news-item">
+          <div>
+            <div class="news-title">Rapport trimestriel Q1 disponible</div>
+            <div class="news-desc">Le bilan du premier trimestre 2026 enregistre une hausse de 14% des amendes recouvrées.</div>
+          </div>
+          <div class="news-time">il y a 4h</div>
+        </div>
+        <div class="news-item">
+          <div>
+            <div class="news-title">Opération Éclipse : 3 arrestations</div>
+            <div class="news-desc">Suite à 8 mois d'enquête, trois dirigeants ont été interpellés pour évasion fiscale majeure.</div>
+          </div>
+          <div class="news-time">il y a 1j</div>
+        </div>
+      </div>
+
+      <!-- Derniers dossiers -->
+      <div class="grid-col">
+        <div class="section-title">Derniers Dossiers</div>
+        <div class="dossier-item">
+          <div class="dossier-icon">🏢</div>
+          <div class="dossier-info">
+            <div class="dossier-id">INV-DOT-202601</div>
+            <div class="dossier-name">Entreprise LS Motors</div>
+            <div class="dossier-status">Demande d'audit fiscal en cours</div>
+          </div>
+          <div class="dossier-arrow">›</div>
+        </div>
+        <div class="dossier-item">
+          <div class="dossier-icon">🏭</div>
+          <div class="dossier-info">
+            <div class="dossier-id">INV-DOT-202600</div>
+            <div class="dossier-name">Société Clean Air</div>
+            <div class="dossier-status">Démarche fiscale taux réduit</div>
+          </div>
+          <div class="dossier-arrow">›</div>
+        </div>
+        <div class="dossier-item">
+          <div class="dossier-icon">👤</div>
+          <div class="dossier-info">
+            <div class="dossier-id">INV-DOT-202599</div>
+            <div class="dossier-name">Résidence Vinewood Towers</div>
+            <div class="dossier-status">Contrôle immobilier — clôturé</div>
+          </div>
+          <div class="dossier-arrow">›</div>
+        </div>
+        <div class="dossier-item">
+          <div class="dossier-icon">⚓</div>
+          <div class="dossier-info">
+            <div class="dossier-id">INV-DOT-202598</div>
+            <div class="dossier-name">Port Commerce International</div>
+            <div class="dossier-status">Audit douanier en attente</div>
+          </div>
+          <div class="dossier-arrow">›</div>
+        </div>
+        <a href="#" class="btn-all">Tous les Dossiers</a>
+      </div>
+
+      <!-- À propos -->
+      <div class="grid-col">
+        <div class="section-title">À Propos du DOT</div>
+        <p class="apropos-text">Le DOT est l'agence fédérale en charge de la régulation de la fiscalité, de l'audit économique et de la régulation des entreprises à San Andreas.</p>
+        <p class="apropos-text">Sa mission est d'assurer l'application des lois et règlements fiscaux, la lutte contre la fraude économique et la bonne gouvernance des activités commerciales.</p>
+        <ul class="check-list">
+          <li>Conformité Fiscale & Audit</li>
+          <li>Prévention des Fraudes</li>
+          <li>Régulation Économique</li>
+          <li>Soutien aux Entreprises Conformes</li>
+          <li>Coopération Judiciaire Fédérale</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Chiffres Clés -->
+<section class="stats-section">
+  <div class="container">
+    <div class="section-title">Chiffres Clés — Exercice 2025</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div>
+        <div class="stat-number">$679,324,000</div>
+        <div class="stat-label">Amendes Payées</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div>
+        <div class="stat-number">1,450</div>
+        <div class="stat-label">Infractions Constatées</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔍</div>
+      <div>
+        <div class="stat-number">342</div>
+        <div class="stat-label">Enquêtes Actives</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⚖️</div>
+      <div>
+        <div class="stat-number">97</div>
+        <div class="stat-label">Poursuites Judiciaires</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dossiers Publics -->
+<section>
+  <div class="container">
+    <div class="section-title">Dossiers Publics</div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterCards(this, 'all')">Tout</button>
+      <button class="filter-btn" onclick="filterCards(this, 'economie')">Économie</button>
+      <button class="filter-btn" onclick="filterCards(this, 'entreprise')">Entreprises</button>
+      <button class="filter-btn" onclick="filterCards(this, 'fiscalite')">Fiscalité</button>
+      <button class="filter-btn" onclick="filterCards(this, 'information')">Informations</button>
+    </div>
+    <div class="cards-grid">
+      <div class="pub-card" data-cat="economie">
+        <div class="card-img card-img-eco">📊</div>
+        <div class="card-body">
+          <div class="card-tag">Économie</div>
+          <div class="card-title">Bilan économique de l'industrie extractive</div>
+          <div class="card-desc">Rapport complet sur les taxes appliquées au secteur minier de San Andreas pour l'exercice 2025.</div>
+        </div>
+        <div class="card-meta"><span>ÉCONOMIE</span><span>il y a 4h</span></div>
+      </div>
+      <div class="pub-card" data-cat="entreprise">
+        <div class="card-img card-img-inv">🏢</div>
+        <div class="card-body">
+          <div class="card-tag">Entreprises</div>
+          <div class="card-title">Registre des entreprises sous contrôle fiscal</div>
+          <div class="card-desc">Liste consolidée des entités commerciales soumises à audit en cours d'exercice.</div>
+        </div>
+        <div class="card-meta"><span>ENTREPRISES</span><span>il y a 4h</span></div>
+      </div>
+      <div class="pub-card" data-cat="fiscalite">
+        <div class="card-img card-img-fisc">⚖️</div>
+        <div class="card-body">
+          <div class="card-tag">Fiscalité</div>
+          <div class="card-title">Barème des taux d'imposition fédéraux 2026</div>
+          <div class="card-desc">Tableau officiel des nouvelles tranches fiscales applicables aux personnes morales et physiques.</div>
+        </div>
+        <div class="card-meta"><span>FISCALITÉ</span><span>il y a 18h</span></div>
+      </div>
+      <div class="pub-card" data-cat="information">
+        <div class="card-img card-img-info">📜</div>
+        <div class="card-body">
+          <div class="card-tag">Informations</div>
+          <div class="card-title">Communiqué officiel — Loi n°47-B mise à jour</div>
+          <div class="card-desc">Modifications apportées à l'article 47-B du Code Fiscal concernant les transactions cryptographiques.</div>
+        </div>
+        <div class="card-meta"><span>INFORMATIONS</span><span>il y a 1j</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-badge"></div>
+          <div class="logo-text">
+            <div class="dot-name">DOT <span>Department of Tax</span></div>
+            <div class="dot-sub">Government of San Andreas</div>
+          </div>
+        </div>
+        <p class="footer-desc">L'agence fédérale de régulation fiscale et économique de l'État de San Andreas. Transparence, rigueur, justice.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <a href="#">Accueil</a>
+        <a href="#">Département</a>
+        <a href="#">Rapports</a>
+        <a href="#">Ressources</a>
+        <a href="#">Dossiers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#">Déclarer une fraude</a>
+        <a href="#">Consulter un dossier</a>
+        <a href="#">Régularisation</a>
+        <a href="#">Formulaires</a>
+        <a href="#">Législation</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="#">Sièges & Bureaux</a>
+        <a href="#">Médias & Presse</a>
+        <a href="#">Whistleblowing</a>
+        <a href="#">Recrutement</a>
+        <a href="#">Urgences</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2006–2026 DOT · Department of Tax · Gouvernement de San Andreas</span>
+      <div>
+        <a href="#">Mentions légales</a>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">Contact</a>
+        <a href="#">1865</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Modal Login -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-logo">
+      <div class="logo-badge" style="width:36px;height:36px;font-size:14px;"></div>
+      <div style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);">DOT · Espace Sécurisé</div>
+    </div>
+    <h2>Connexion Agents</h2>
+    <p class="modal-sub">Accès réservé au personnel accrédité du Department of Tax.</p>
+    <div class="form-group">
+      <label>Identifiant Agent</label>
+      <input type="text" placeholder="DOT-XXXXX">
+    </div>
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" placeholder="••••••••">
+    </div>
+    <div class="form-group">
+      <label>Code d'accès à 6 chiffres</label>
+      <input type="text" placeholder="_ _ _ _ _ _" maxlength="6">
+    </div>
+    <button class="btn-submit" onclick="simulateLogin()">Accéder au Portail</button>
+    <div class="modal-links">
+      <a href="#">Identifiant oublié ?</a>
+      <a href="#">Assistance technique</a>
+    </div>
+    <div class="badge-secure">Connexion chiffrée 256-bit · DOT Secure Access v4.2</div>
+  </div>
+</div>
+
+<script>
+function openModal() {
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+function simulateLogin() {
+  alert('Accès sécurisé — Redirection vers le portail agent DOT...');
+  closeModal();
+}
+function filterCards(btn, cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.pub-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'flex' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>
